@@ -34,13 +34,13 @@ distancias = [
 ]
 
 # Define os nomes das cidades
-pontos_cidades = ["Cidade 1", "Cidade 2", "Cidade 3", "Cidade 4", "Cidade 5", "Cidade 6", "Cidade 7", "Cidade 8", "Cidade 9", "Cidade 10", "Cidade 11", "Cidade 12", "Cidade 13", "Cidade 14", "Cidade 15", "Cidade 16", "Cidade 17", "Cidade 18", "Cidade 19", "Cidade 20", "Cidade 21", "Cidade 22", "Cidade 23", "Cidade 24", "Cidade 25", "Cidade 26", "Cidade 27", "Cidade 28", "Cidade 29"]
+pontos_cidades = ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18", "C19", "C20", "C21", "C22", "C23", "C24", "C25", "C26", "C27", "C28", "C29"]
 
 # Define os parâmetros do algoritmo genético
-POPULATION_SIZE = 15
-ELITE_SIZE = 5
-MUTATION_RATE = 0.01
-GENERATIONS = 3500
+TAMANHO_POPULACAO = 50
+TAMANHO_ELITE = 5
+TAXA_MUTACAO = 0.05
+GERACOES = 3500
 
 # Define a classe para representar uma solução (ou indivíduo) do problema
 class Solucao:
@@ -58,7 +58,7 @@ class Solucao:
 # Define as funções para criar e evoluir a população
 def cria_populacao():
     populacao = []
-    for i in range(POPULATION_SIZE):
+    for i in range(TAMANHO_POPULACAO):
         cidades = list(range(len(distancias)))
         random.shuffle(cidades)
         solucao = Solucao(cidades)
@@ -89,16 +89,16 @@ def cruzamento(pai1, pai2):
     return child
 
 def mutacao(solucao):
-    if random.random() < MUTATION_RATE:
+    if random.random() < TAXA_MUTACAO:
         i = random.randint(0, len(solucao.cidades) - 1)
         j = random.randint(0, len(solucao.cidades) - 1)
         solucao.cidades[i], solucao.cidades[j] = solucao.cidades[j], solucao.cidades[i]
         solucao.distancia = solucao.calcula_distancia()
 
 def envolver_populacao(populacao):
-    elite = populacao[:ELITE_SIZE]
+    elite = populacao[:TAMANHO_ELITE]
     filho = []
-    while len(filho) < POPULATION_SIZE - ELITE_SIZE:
+    while len(filho) < TAMANHO_POPULACAO - TAMANHO_ELITE:
         pai1 = selecionar_pais(populacao)
         pai2 = selecionar_pais(populacao)
         child = cruzamento(pai1[0], pai2[0])
@@ -111,11 +111,11 @@ def envolver_populacao(populacao):
 def algoritmo_genetico():
     populacao = cria_populacao()
     melhor_solucao = None
-    for i in range(GENERATIONS):
+    for i in range(GERACOES):
         populacao = cria_populacao()
     melhor_solucao = None
     melhor_distancia = float("inf")
-    for i in range(GENERATIONS):
+    for i in range(GERACOES):
         populacao = envolver_populacao(populacao)
         populacao = classifica_populacao(populacao)
         if populacao[0].distancia < melhor_distancia:
@@ -129,5 +129,5 @@ def algoritmo_genetico():
     print('=' * 150)
     print(f"Distância total a ser percorrida: {melhor_distancia}km \nPercurso: {melhor_distancia_total}\n")
     
-        
+     
 melhor_solucao = algoritmo_genetico()
